@@ -8,8 +8,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.util.NumberUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -19,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
+    private static final String TOKEN_KEY = "token";
 
     @PostMapping("/user")
     @ApiOperation("增")
@@ -60,14 +63,17 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    @ApiOperation("增或覆盖改")
+    @ApiOperation("覆盖写入")
     public User put(@RequestBody UserDto userDto) {
         return userService.put(User.valueOf(userDto));
     }
 
     @PatchMapping("/user")
-    @ApiOperation("改")
-    public User set(@RequestBody UserDto userDto) {
+    @ApiOperation("改，忽略空属性")
+    public User set(@RequestBody UserDto userDto, HttpServletRequest request) {
+        Long lastModifiedBy = NumberUtils.parseNumber(request.getHeader(TOKEN_KEY), Long.class);
+        User user = User.valueOf(userDto);
+        user.setLastModifiedBy(lastModifiedBy);
         return userService.set(User.valueOf(userDto));
     }
 
@@ -76,8 +82,9 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "id", required = true),
     })
-    public User disable(@PathVariable long id) {
-        return userService.disable(id);
+    public User disable(@PathVariable long id, HttpServletRequest request) {
+        Long lastModifiedBy = NumberUtils.parseNumber(request.getHeader(TOKEN_KEY), Long.class);
+        return userService.disable(id, lastModifiedBy);
     }
 
     @DeleteMapping("/user/{id}")

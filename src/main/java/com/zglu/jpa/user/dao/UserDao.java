@@ -27,6 +27,7 @@ public class UserDao {
         boolean flag = user.getId() == null || user.getId() == 0L || !userRepository.existsById(user.getId());
         Assert.isTrue(flag, "Duplicate key!");
         user.setCreatedDate(LocalDateTime.now());
+        user.setLastModifiedDate(LocalDateTime.now());
         user.setEnable(true);
         return userRepository.save(user);
     }
