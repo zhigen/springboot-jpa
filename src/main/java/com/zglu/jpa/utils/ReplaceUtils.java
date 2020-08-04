@@ -1,4 +1,4 @@
-package com.zglu.jpa;
+package com.zglu.jpa.utils;
 
 import lombok.extern.log4j.Log4j2;
 

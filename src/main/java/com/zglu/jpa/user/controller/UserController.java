@@ -8,32 +8,39 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.util.NumberUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
  * @author zglu
  */
 @RestController
+@RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
-    private static final String TOKEN_KEY = "token";
 
-    @PostMapping("/user")
+    @PostMapping
     @ApiOperation("增")
     public User add(@RequestBody UserDto userDto) {
         return userService.add(User.valueOf(userDto));
     }
 
-    @GetMapping("/user/{id}")
+    @PatchMapping
+    @ApiOperation("改，忽略空属性")
+    public User set(@RequestBody UserDto userDto) {
+        return userService.set(User.valueOf(userDto));
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("删")
+    public void remove(@PathVariable long id) {
+        userService.remove(id);
+    }
+
+    @GetMapping("/{id}")
     @ApiOperation("查")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "id", required = true),
-    })
     public User get(@PathVariable long id) {
         return userService.get(id);
     }
@@ -61,39 +68,4 @@ public class UserController {
     public Page<User> page(String q, String order, Integer number, Integer size) {
         return userService.page(q, order, number, size);
     }
-
-    @PutMapping("/user")
-    @ApiOperation("覆盖写入")
-    public User put(@RequestBody UserDto userDto) {
-        return userService.put(User.valueOf(userDto));
-    }
-
-    @PatchMapping("/user")
-    @ApiOperation("改，忽略空属性")
-    public User set(@RequestBody UserDto userDto, HttpServletRequest request) {
-        Long lastModifiedBy = NumberUtils.parseNumber(request.getHeader(TOKEN_KEY), Long.class);
-        User user = User.valueOf(userDto);
-        user.setLastModifiedBy(lastModifiedBy);
-        return userService.set(User.valueOf(userDto));
-    }
-
-    @PatchMapping("/user/{id}")
-    @ApiOperation("逻辑删")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "id", required = true),
-    })
-    public User disable(@PathVariable long id, HttpServletRequest request) {
-        Long lastModifiedBy = NumberUtils.parseNumber(request.getHeader(TOKEN_KEY), Long.class);
-        return userService.disable(id, lastModifiedBy);
-    }
-
-    @DeleteMapping("/user/{id}")
-    @ApiOperation("删")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "path", dataType = "long", name = "id", value = "id", required = true),
-    })
-    public void remove(@PathVariable long id) {
-        userService.remove(id);
-    }
-
 }

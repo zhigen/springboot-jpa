@@ -1,4 +1,4 @@
-package com.zglu.jpa;
+package com.zglu.jpa.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +29,7 @@ public class SwaggerConfig {
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("jpa")
-                .description("测试文档")
+                .description("jpa测试文档")
                 .version("1")
                 .build();
     }
@@ -41,6 +43,7 @@ public class SwaggerConfig {
         parameterList.add(parameterBuilder.build());
 
         return new Docket(DocumentationType.SWAGGER_2)
+                .directModelSubstitute(LocalDateTime.class, Date.class)
                 .globalOperationParameters(parameterList)
                 .apiInfo(apiInfo)
                 .select()
@@ -48,4 +51,5 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
     }
+
 }

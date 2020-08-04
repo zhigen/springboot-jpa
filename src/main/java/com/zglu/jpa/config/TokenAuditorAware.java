@@ -1,9 +1,8 @@
-package com.zglu.jpa;
+package com.zglu.jpa.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.util.NumberUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -23,9 +22,10 @@ public class TokenAuditorAware implements AuditorAware<Long> {
         if (servletRequestAttributes != null) {
             HttpServletRequest request = servletRequestAttributes.getRequest();
             String token = request.getHeader("token");
-            Long id = NumberUtils.parseNumber(token, Long.class);
+            Long id = Long.parseLong(token);
             return Optional.of(id);
         }
         return Optional.empty();
     }
+
 }

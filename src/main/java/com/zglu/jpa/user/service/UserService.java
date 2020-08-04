@@ -20,11 +20,23 @@ public class UserService {
     private final UserDao userDao;
 
     public User add(User user) {
-        return userDao.save(user);
+        return userDao.add(user);
+    }
+
+    public User set(User user) {
+        return userDao.set(user);
+    }
+
+    public void remove(long id) {
+        userDao.remove(id);
+    }
+
+    public List<User> get() {
+        return userDao.get();
     }
 
     public User get(long id) {
-        return userDao.findById(id);
+        return userDao.get(id);
     }
 
     public List<User> list(String q, String order, Integer offset, Integer limit) {
@@ -36,26 +48,6 @@ public class UserService {
         Pageable pageable = PageRequest.of(number, size);
         long total = userDao.count(q);
         return new PageImpl<>(content, pageable, total);
-    }
-
-    public User put(User user) {
-        return userDao.put(user);
-    }
-
-    public User set(User user) {
-        return userDao.update(user);
-    }
-
-    public User disable(long id, Long lastModifiedBy) {
-        User user = new User();
-        user.setId(id);
-        user.setEnable(false);
-        user.setLastModifiedBy(lastModifiedBy);
-        return userDao.update(user);
-    }
-
-    public void remove(long id) {
-        userDao.deleteById(id);
     }
 
 }
