@@ -1,4 +1,4 @@
-package com.zglu.jpa.db1.user.dao;
+package com.zglu.jpa.db1.goods.dao;
 
 import com.zglu.jpa.common.BaseEntity;
 import lombok.Data;

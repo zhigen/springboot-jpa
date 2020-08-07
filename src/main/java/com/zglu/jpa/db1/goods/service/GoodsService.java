@@ -1,7 +1,7 @@
-package com.zglu.jpa.db1.user.service;
+package com.zglu.jpa.db1.goods.service;
 
-import com.zglu.jpa.db1.user.dao.Goods;
-import com.zglu.jpa.db1.user.dao.GoodsDao;
+import com.zglu.jpa.db1.goods.dao.Goods;
+import com.zglu.jpa.db1.goods.dao.GoodsDao;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

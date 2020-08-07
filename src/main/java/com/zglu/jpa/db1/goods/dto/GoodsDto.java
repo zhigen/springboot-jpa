@@ -1,6 +1,6 @@
-package com.zglu.jpa.db1.user.dto;
+package com.zglu.jpa.db1.goods.dto;
 
-import com.zglu.jpa.db1.user.dao.Goods;
+import com.zglu.jpa.db1.goods.dao.Goods;
 import lombok.Data;
 
 /**
